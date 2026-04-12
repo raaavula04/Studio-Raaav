@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Paw & Order — A cozy wild-west adventure where you play as a sheriff cat restoring peace in a backyard frontier. Coming to PC on Steam.">
+<meta property="og:title" content="Paw & Order — Sheriff Cat Game">
+<meta property="og:description" content="A cozy wild-west adventure. One backyard. One badge. One very determined cat.">
+<meta property="og:type" content="website">
+<title>Paw & Order — Studio Raaav</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rye&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+
+<style>
+/* ─── RESET & ROOT ─────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --midnight:   #100C06;
+  --ink:        #1C1409;
+  --inklit:     #2A1E0E;
+  --rust:       #B54318;
+  --rust-mid:   #8A3214;
+  --rust-glow:  rgba(181,67,24,0.18);
+  --sand:       #D4A44A;
+  --sand-pale:  #E8C97A;
+  --tan:        #F0E2C4;
+  --tan-dim:    rgba(240,226,196,0.65);
+  --tan-ghost:  rgba(240,226,196,0.12);
+  --dust:       #A08060;
+  --parch:      #EAD9B8;
+  --sage:       #4E6B42;
+  --sky:        #4F8FAE;
+  --serif: 'Rye', serif;
+  --display: 'Bebas Neue', sans-serif;
+  --body: 'DM Sans', sans-serif;
+  --editorial: 'Playfair Display', serif;
+}
+
+body {
+  background: var(--midnight);
+  color: var(--tan);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.75;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ─── GRAIN OVERLAY ─────────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+/* ─── NAV ───────────────────────────────────────────── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 3rem;
+  transition: background 0.4s, backdrop-filter 0.4s;
+}
+nav.scrolled {
+  background: rgba(16,12,6,0.88);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(212,164,74,0.12);
+}
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: var(--sand);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+}
+.nav-logo span { color: var(--tan-dim); font-size: 0.7rem; font-family: var(--body); letter-spacing: 0.2em; text-transform: uppercase; margin-left: 0.6em; vertical-align: middle; }
+.nav-links {
+  display: flex;
+  gap: 2.2rem;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(240,226,196,0.55);
+  text-decoration: none;
+  transition: color 0.2s;
+  font-weight: 500;
+}
+.nav-links a:hover { color: var(--sand); }
+.nav-cta {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--sand) !important;
+  border: 1px solid rgba(212,164,74,0.5);
+  padding: 7px 18px;
+  border-radius: 2px;
+  transition: background 0.2s, color 0.2s !important;
+}
+.nav-cta:hover { background: var(--sand) !important; color: var(--midnight) !important; }
+
+.nav-burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+.nav-burger span { display: block; width: 22px; height: 1.5px; background: var(--tan); border-radius: 2px; transition: all 0.3s; }
+
+/* ─── HERO ───────────────────────────────────────────── */
+#hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 7rem 2rem 5rem;
+  overflow: hidden;
+}
+
+/* Deep radial gradient sky */
+#hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 100%, #3D1A06 0%, transparent 70%),
+    radial-gradient(ellipse 100% 40% at 50% 0%, #0A0804 0%, transparent 70%),
+    linear-gradient(180deg, #0A0804 0%, #1A0C04 40%, #2A1008 70%, #0A0804 100%);
+}
+
+/* Stars */
+#hero .stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+#hero .stars::before, #hero .stars::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 15% 20%, rgba(240,226,196,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 35% 8%, rgba(240,226,196,0.5) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 60% 15%, rgba(240,226,196,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 5%, rgba(240,226,196,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 25%, rgba(240,226,196,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 7% 45%, rgba(240,226,196,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 92% 50%, rgba(240,226,196,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 22% 70%, rgba(240,226,196,0.2) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 70% 35%, rgba(212,164,74,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 45% 55%, rgba(240,226,196,0.3) 0%, transparent 100%);
+}
+
+/* Silhouette cactus/fence ground layer */
+.hero-ground {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 220px;
+  pointer-events: none;
+}
+
+/* Moon glow */
+.hero-moon {
+  position: absolute;
+  top: 14%;
+  right: 18%;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #F5E8C0 0%, #D4B870 50%, transparent 70%);
+  box-shadow: 0 0 40px 20px rgba(212,184,112,0.12), 0 0 100px 60px rgba(212,164,74,0.05);
+  animation: moonpulse 8s ease-in-out infinite;
+}
+@keyframes moonpulse { 0%,100%{ box-shadow: 0 0 40px 20px rgba(212,184,112,0.12), 0 0 100px 60px rgba(212,164,74,0.05);} 50%{ box-shadow: 0 0 60px 30px rgba(212,184,112,0.18), 0 0 140px 80px rgba(212,164,74,0.08);} }
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-eyebrow {
+  font-family: var(--display);
+  font-size: 0.82rem;
+  letter-spacing: 0.5em;
+  color: var(--rust);
+  margin-bottom: 1.4rem;
+  display: block;
+  animation: fadeup 0.8s ease both;
+}
+
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(5rem, 16vw, 12rem);
+  line-height: 0.85;
+  color: var(--tan);
+  text-shadow:
+    3px 3px 0 #5C2A0A,
+    6px 6px 0 rgba(0,0,0,0.5),
+    0 0 120px rgba(181,67,24,0.2);
+  margin-bottom: 0.15em;
+  animation: fadeup 0.8s 0.1s ease both;
+}
+.hero-title .line2 {
+  color: var(--sand);
+  display: block;
+  text-shadow:
+    3px 3px 0 #7A4A00,
+    6px 6px 0 rgba(0,0,0,0.5),
+    0 0 80px rgba(212,164,74,0.25);
+}
+
+.hero-sub {
+  font-family: var(--display);
+  font-size: clamp(0.9rem, 2.5vw, 1.4rem);
+  letter-spacing: 0.3em;
+  color: var(--dust);
+  margin-bottom: 1.8rem;
+  animation: fadeup 0.8s 0.2s ease both;
+}
+
+.hero-tagline {
+  font-family: var(--editorial);
+  font-style: italic;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: rgba(240,226,196,0.6);
+  max-width: 500px;
+  margin: 0 auto 3rem;
+  line-height: 1.6;
+  animation: fadeup 0.8s 0.3s ease both;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeup 0.8s 0.4s ease both;
+}
+
+.btn-primary {
+  font-family: var(--display);
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  color: var(--midnight);
+  background: var(--sand);
+  padding: 14px 36px;
+  border-radius: 2px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  display: inline-block;
+}
+.btn-primary:hover { background: var(--sand-pale); transform: translateY(-1px); }
+
+.btn-secondary {
+  font-family: var(--display);
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  color: var(--tan);
+  background: transparent;
+  padding: 13px 36px;
+  border-radius: 2px;
+  text-decoration: none;
+  border: 1px solid rgba(240,226,196,0.3);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, transform 0.15s;
+  display: inline-block;
+}
+.btn-secondary:hover { border-color: var(--tan); transform: translateY(-1px); }
+
+.hero-scroll {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  animation: fadeup 1s 1s ease both;
+}
+.hero-scroll span {
+  font-size: 0.65rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(240,226,196,0.25);
+}
+.scroll-line {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(to bottom, rgba(212,164,74,0.5), transparent);
+  animation: scrolldown 2s ease-in-out infinite;
+}
+@keyframes scrolldown { 0%,100%{ transform: scaleY(1) translateY(0); opacity:1; } 50%{ transform: scaleY(0.6) translateY(8px); opacity:0.5; } }
+@keyframes fadeup { from{ opacity:0; transform: translateY(24px); } to{ opacity:1; transform: translateY(0); } }
+
+/* ─── SECTION SHARED ─────────────────────────────────── */
+.section {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 7rem 2.5rem;
+}
+.section-label {
+  font-family: var(--display);
+  font-size: 0.75rem;
+  letter-spacing: 0.45em;
+  color: var(--rust);
+  margin-bottom: 0.8rem;
+  display: block;
+}
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  color: var(--tan);
+  line-height: 1;
+  text-shadow: 2px 2px 0 var(--rust-mid);
+  margin-bottom: 1.5rem;
+}
+.section-title .accent { color: var(--sand); }
+
+.rule {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 1rem;
+}
+.rule::before, .rule::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,164,74,0.35), transparent);
+}
+.rule span {
+  font-family: var(--serif);
+  font-size: 0.9rem;
+  color: var(--sand);
+  white-space: nowrap;
+  opacity: 0.7;
+}
+
+/* ─── ABOUT ──────────────────────────────────────────── */
+#about {
+  background: linear-gradient(180deg, var(--midnight) 0%, var(--ink) 50%, var(--midnight) 100%);
+  border-top: 1px solid rgba(212,164,74,0.08);
+  border-bottom: 1px solid rgba(212,164,74,0.08);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.about-visual {
+  position: relative;
+  aspect-ratio: 1;
+  max-width: 420px;
+}
+
+/* Pixel art placeholder — decorative SVG cat silhouette scene */
+.about-frame {
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: var(--inklit);
+  border: 2px solid rgba(212,164,74,0.2);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.about-frame::before {
+  content: 'SCREENSHOT\ACOMING SOON';
+  white-space: pre;
+  font-family: var(--display);
+  font-size: 0.8rem;
+  letter-spacing: 0.25em;
+  color: rgba(240,226,196,0.15);
+  text-align: center;
+}
+
+/* Decorative corner marks */
+.corner-mark {
+  position: absolute;
+  width: 16px; height: 16px;
+  border-color: rgba(212,164,74,0.35);
+  border-style: solid;
+}
+.corner-mark.tl { top: -2px; left: -2px; border-width: 2px 0 0 2px; }
+.corner-mark.tr { top: -2px; right: -2px; border-width: 2px 2px 0 0; }
+.corner-mark.bl { bottom: -2px; left: -2px; border-width: 0 0 2px 2px; }
+.corner-mark.br { bottom: -2px; right: -2px; border-width: 0 2px 2px 0; }
+
+.about-text p {
+  color: var(--tan-dim);
+  margin-bottom: 1.2rem;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+.about-text p strong { color: var(--sand); font-weight: 500; }
+
+.about-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2rem;
+}
+.tag {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 5px 14px;
+  border-radius: 2px;
+  border: 1px solid;
+}
+.tag.rust  { color: #E0886A; border-color: rgba(181,67,24,0.5); background: rgba(181,67,24,0.12); }
+.tag.sage  { color: #8AB87A; border-color: rgba(78,107,66,0.5); background: rgba(78,107,66,0.12); }
+.tag.sky   { color: #7BBAD6; border-color: rgba(79,143,174,0.5); background: rgba(79,143,174,0.12); }
+.tag.sand  { color: var(--sand); border-color: rgba(212,164,74,0.5); background: rgba(212,164,74,0.1); }
+
+/* ─── ROADMAP ────────────────────────────────────────── */
+#roadmap {
+  position: relative;
+}
+#roadmap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(181,67,24,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.roadmap-track {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  position: relative;
+  margin-top: 3rem;
+}
+
+/* Connector line between phases */
+.roadmap-track::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: 12.5%;
+  right: 12.5%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--rust) 0%, rgba(181,67,24,0.3) 100%);
+  z-index: 0;
+}
+
+.phase-card {
+  position: relative;
+  padding: 0 1.5rem 2.5rem;
+  z-index: 1;
+}
+
+.phase-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--inklit);
+  border: 2px solid rgba(212,164,74,0.3);
+  margin: 0 auto 1.5rem;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.2s;
+}
+.phase-card.active .phase-dot {
+  background: var(--sand);
+  border-color: var(--sand);
+  box-shadow: 0 0 0 6px rgba(212,164,74,0.15), 0 0 20px rgba(212,164,74,0.3);
+  animation: pulsedot 2.5s ease-in-out infinite;
+}
+@keyframes pulsedot {
+  0%,100% { box-shadow: 0 0 0 6px rgba(212,164,74,0.15), 0 0 20px rgba(212,164,74,0.3); }
+  50%      { box-shadow: 0 0 0 10px rgba(212,164,74,0.08), 0 0 30px rgba(212,164,74,0.2); }
+}
+.phase-card.done .phase-dot { background: var(--rust); border-color: var(--rust); }
+
+.phase-num {
+  font-family: var(--display);
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  color: var(--rust);
+  margin-bottom: 0.5rem;
+  text-align: center;
+  display: block;
+}
+.phase-card.active .phase-num { color: var(--sand); }
+
+.phase-name {
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--tan);
+  margin-bottom: 0.8rem;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.phase-items {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.phase-items li {
+  font-size: 0.82rem;
+  color: rgba(240,226,196,0.5);
+  padding-left: 1.1em;
+  position: relative;
+  line-height: 1.4;
+}
+.phase-items li::before { content: '·'; position: absolute; left: 0; color: var(--rust); font-size: 1rem; line-height: 1.2; }
+.phase-card.active .phase-items li { color: rgba(240,226,196,0.75); }
+.phase-card.active .phase-items li::before { color: var(--sand); }
+
+.phase-status {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 2px;
+}
+.phase-card.active .phase-status { background: rgba(212,164,74,0.15); color: var(--sand); border: 1px solid rgba(212,164,74,0.35); }
+.phase-card.done .phase-status { background: rgba(181,67,24,0.12); color: #D07050; border: 1px solid rgba(181,67,24,0.3); }
+.phase-card:not(.active):not(.done) .phase-status { background: rgba(240,226,196,0.04); color: rgba(240,226,196,0.3); border: 1px solid rgba(240,226,196,0.1); }
+
+/* ─── DEVLOG ─────────────────────────────────────────── */
+#devlog {
+  background: var(--ink);
+  border-top: 1px solid rgba(212,164,74,0.08);
+  border-bottom: 1px solid rgba(212,164,74,0.08);
+}
+
+.devlog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.devlog-card {
+  background: rgba(240,226,196,0.03);
+  border: 1px solid rgba(212,164,74,0.12);
+  border-radius: 2px;
+  padding: 1.8rem;
+  text-decoration: none;
+  display: block;
+  transition: background 0.25s, border-color 0.25s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.devlog-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--rust), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+.devlog-card:hover {
+  background: rgba(240,226,196,0.06);
+  border-color: rgba(212,164,74,0.28);
+  transform: translateY(-3px);
+}
+.devlog-card:hover::before { transform: scaleX(1); }
+
+.devlog-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+.devlog-type {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 2px;
+}
+.devlog-type.vid  { background: rgba(181,67,24,0.18); color: #E08060; border: 1px solid rgba(181,67,24,0.35); }
+.devlog-type.post { background: rgba(212,164,74,0.12); color: var(--sand); border: 1px solid rgba(212,164,74,0.3); }
+.devlog-date { font-size: 0.72rem; color: rgba(240,226,196,0.3); letter-spacing: 0.08em; }
+
+.devlog-title {
+  font-family: var(--editorial);
+  font-size: 1.05rem;
+  color: var(--tan);
+  line-height: 1.4;
+  margin-bottom: 0.7rem;
+}
+.devlog-excerpt {
+  font-size: 0.85rem;
+  color: rgba(240,226,196,0.5);
+  line-height: 1.6;
+}
+.devlog-arrow {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--rust);
+  transition: color 0.2s, letter-spacing 0.2s;
+}
+.devlog-card:hover .devlog-arrow { color: var(--sand); letter-spacing: 0.25em; }
+
+.devlog-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 2rem;
+  border: 1px dashed rgba(212,164,74,0.15);
+  border-radius: 2px;
+}
+.devlog-empty p {
+  font-family: var(--editorial);
+  font-style: italic;
+  color: rgba(240,226,196,0.3);
+  margin-bottom: 1.2rem;
+}
+
+/* ─── CONTACT ────────────────────────────────────────── */
+#contact {
+  position: relative;
+  text-align: center;
+  overflow: hidden;
+}
+#contact::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 100%, rgba(60,20,6,0.8) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.contact-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.contact-cat {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 1.5rem;
+  animation: floatcat 4s ease-in-out infinite;
+}
+@keyframes floatcat { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+
+.contact-inner .section-title { margin-bottom: 1rem; }
+.contact-inner p {
+  color: var(--tan-dim);
+  margin-bottom: 2.5rem;
+  font-size: 1rem;
+}
+
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  border: 1px solid rgba(212,164,74,0.15);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 2.5rem;
+  text-align: left;
+}
+.contact-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: rgba(240,226,196,0.02);
+  text-decoration: none;
+  transition: background 0.2s;
+  border-bottom: 1px solid rgba(212,164,74,0.08);
+}
+.contact-row:last-child { border-bottom: none; }
+.contact-row:hover { background: rgba(240,226,196,0.06); }
+.contact-row-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(240,226,196,0.35);
+  min-width: 80px;
+}
+.contact-row-val {
+  font-size: 0.95rem;
+  color: var(--tan);
+  flex: 1;
+  padding: 0 1rem;
+}
+.contact-row-val a { color: var(--sand); text-decoration: none; }
+.contact-row-icon {
+  color: rgba(212,164,74,0.4);
+  font-size: 0.8rem;
+  transition: color 0.2s;
+}
+.contact-row:hover .contact-row-icon { color: var(--sand); }
+
+.wishlist-note {
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  color: rgba(240,226,196,0.3);
+  font-style: italic;
+}
+
+/* ─── FOOTER ─────────────────────────────────────────── */
+footer {
+  border-top: 1px solid rgba(212,164,74,0.1);
+  padding: 2.5rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-brand {
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: rgba(212,164,74,0.5);
+  text-decoration: none;
+}
+.footer-copy {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: rgba(240,226,196,0.2);
+  text-transform: uppercase;
+}
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+.footer-links a {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(240,226,196,0.3);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--sand); }
+
+/* ─── ANIMATIONS (scroll reveal) ───────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ─── RESPONSIVE ─────────────────────────────────────── */
+@media (max-width: 900px) {
+  .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .about-visual { max-width: 100%; }
+  .roadmap-track { grid-template-columns: 1fr 1fr; }
+  .roadmap-track::before { display: none; }
+  .devlog-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    inset: 0;
+    background: rgba(16,12,6,0.97);
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    z-index: 99;
+  }
+  .nav-links.open a { font-size: 1rem; }
+  .nav-burger { display: flex; }
+  .section { padding: 5rem 1.5rem; }
+  .roadmap-track { grid-template-columns: 1fr; }
+  .devlog-grid { grid-template-columns: 1fr; }
+  footer { flex-direction: column; text-align: center; }
+  .hero-actions { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ════════════════════════════════════════════ -->
+<nav id="nav">
+  <a class="nav-logo" href="#">Paw & Order <span>by Studio Raaav</span></a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#devlog">Devlog</a></li>
+    <li><a href="#contact" class="nav-cta">Wishlist ↗</a></li>
+  </ul>
+  <div class="nav-burger" id="burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ═══ HERO ════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="stars"></div>
+  <div class="hero-moon"></div>
+
+  <!-- Ground silhouette SVG -->
+  <svg class="hero-ground" viewBox="0 0 1440 220" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice">
+    <!-- Far hills -->
+    <path d="M0 180 Q200 120 400 160 Q600 200 800 150 Q1000 100 1200 155 Q1350 185 1440 160 L1440 220 L0 220Z" fill="#1A0C04" opacity="0.9"/>
+    <!-- Fence posts -->
+    <rect x="60"  y="155" width="6"  height="50" fill="#120A02"/>
+    <rect x="130" y="150" width="6"  height="55" fill="#120A02"/>
+    <rect x="200" y="158" width="6"  height="48" fill="#120A02"/>
+    <rect x="270" y="152" width="6"  height="54" fill="#120A02"/>
+    <line x1="55" y1="168" x2="280" y2="165" stroke="#120A02" stroke-width="4"/>
+    <line x1="55" y1="180" x2="280" y2="178" stroke="#120A02" stroke-width="3"/>
+    <!-- Right fence -->
+    <rect x="1160" y="152" width="6" height="54" fill="#120A02"/>
+    <rect x="1230" y="148" width="6" height="58" fill="#120A02"/>
+    <rect x="1300" y="155" width="6" height="51" fill="#120A02"/>
+    <rect x="1370" y="150" width="6" height="56" fill="#120A02"/>
+    <line x1="1155" y1="166" x2="1380" y2="163" stroke="#120A02" stroke-width="4"/>
+    <line x1="1155" y1="178" x2="1380" y2="176" stroke="#120A02" stroke-width="3"/>
+    <!-- Cactus left -->
+    <rect x="340" y="110" width="12" height="80" rx="6" fill="#0E0802"/>
+    <rect x="316" y="130" width="28" height="10" rx="5" fill="#0E0802"/>
+    <rect x="316" y="115" width="12" height="30" rx="6" fill="#0E0802"/>
+    <!-- Cactus right -->
+    <rect x="1060" y="100" width="14" height="95" rx="7" fill="#0E0802"/>
+    <rect x="1034" y="122" width="30" height="11" rx="5" fill="#0E0802"/>
+    <rect x="1034" y="104" width="14" height="34" rx="7" fill="#0E0802"/>
+    <rect x="1070" y="132" width="30" height="11" rx="5" fill="#0E0802"/>
+    <rect x="1070" y="112" width="14" height="36" rx="7" fill="#0E0802"/>
+    <!-- Ground fill -->
+    <rect x="0" y="195" width="1440" height="25" fill="#0E0802"/>
+  </svg>
+
+  <div class="hero-content">
+    <span class="hero-eyebrow">Studio Raaav Presents</span>
+    <h1 class="hero-title">
+      Paw
+      <span class="line2">&amp; Order</span>
+    </h1>
+    <p class="hero-sub">The Backyard Frontier — Coming to PC</p>
+    <p class="hero-tagline">"One badge. One backyard. One very determined cat standing between order and absolute chaos."</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Wishlist on Steam</a>
+      <a href="#about" class="btn-secondary">Learn More</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══ ABOUT ══════════════════════════════════════════ -->
+<section id="about">
+  <div class="section">
+    <div class="rule"><span>✦</span></div>
+    <div class="about-grid">
+      <div class="about-visual reveal">
+        <div class="about-frame">
+          <div class="corner-mark tl"></div>
+          <div class="corner-mark tr"></div>
+          <div class="corner-mark bl"></div>
+          <div class="corner-mark br"></div>
+        </div>
+      </div>
+      <div class="about-text reveal reveal-delay-2">
+        <span class="section-label">About the Game</span>
+        <h2 class="section-title">The Law Has <span class="accent">Fur.</span></h2>
+        <p>In a sun-baked suburban backyard, something has gone terribly, adorably wrong. The lizards have gone rogue. The neighbourhood squirrels have formed a gang. And the only thing standing between total backyard anarchy and a quiet Tuesday afternoon is <strong>you</strong> — a tiny, magnificently-hatted sheriff cat.</p>
+        <p><strong>Paw & Order</strong> is a cozy-action hybrid that weaponises the mundane. A garden hose becomes a canyon river. A stack of cardboard becomes a saloon. Every plastic toy becomes a relic of frontier legend.</p>
+        <p>Designed to be finished. Designed to be remembered. <strong>2–4 hours of pure backyard justice.</strong></p>
+        <div class="about-tags">
+          <span class="tag rust">Cozy Action</span>
+          <span class="tag sky">Top-Down 2D</span>
+          <span class="tag sage">Pixel Art</span>
+          <span class="tag sand">PC · Steam</span>
+          <span class="tag rust">Solo Dev</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ROADMAP ════════════════════════════════════════ -->
+<section id="roadmap">
+  <div class="section">
+    <div class="rule"><span>✦</span></div>
+    <div style="text-align:center;" class="reveal">
+      <span class="section-label">Development Roadmap</span>
+      <h2 class="section-title">The <span class="accent">Trail</span> Ahead</h2>
+      <p style="color:var(--tan-dim); max-width:520px; margin: 0 auto 1rem; font-size:0.95rem;">Paw & Order is being built in the open. Here's where we are, and where we're headed.</p>
+    </div>
+    <div class="roadmap-track">
+      <div class="phase-card done reveal reveal-delay-1">
+        <div class="phase-dot"></div>
+        <span class="phase-num">Phase 01</span>
+        <h3 class="phase-name">The Foundation</h3>
+        <ul class="phase-items">
+          <li>Core movement system</li>
+          <li>Basic combat skeleton</li>
+          <li>Engine & project setup</li>
+        </ul>
+        <span class="phase-status">Complete</span>
+      </div>
+      <div class="phase-card active reveal reveal-delay-2">
+        <div class="phase-dot"></div>
+        <span class="phase-num">Phase 02</span>
+        <h3 class="phase-name">The World Takes Shape</h3>
+        <ul class="phase-items">
+          <li>First playable area</li>
+          <li>Enemy AI systems</li>
+          <li>Basic UI & HUD</li>
+          <li>Art pass — tiles & sprites</li>
+        </ul>
+        <span class="phase-status">In Progress</span>
+      </div>
+      <div class="phase-card reveal reveal-delay-3">
+        <div class="phase-dot"></div>
+        <span class="phase-num">Phase 03</span>
+        <h3 class="phase-name">The Town Gets People</h3>
+        <ul class="phase-items">
+          <li>NPC interaction system</li>
+          <li>Dialogue & quest system</li>
+          <li>More areas unlocked</li>
+          <li>Audio implementation</li>
+        </ul>
+        <span class="phase-status">Upcoming</span>
+      </div>
+      <div class="phase-card reveal reveal-delay-4">
+        <div class="phase-dot"></div>
+        <span class="phase-num">Phase 04</span>
+        <h3 class="phase-name">The Grand Finale</h3>
+        <ul class="phase-items">
+          <li>Full content pass</li>
+          <li>Visual & audio polish</li>
+          <li>Playtesting & fixes</li>
+          <li>Steam release</li>
+        </ul>
+        <span class="phase-status">Future</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DEVLOG ══════════════════════════════════════════ -->
+<section id="devlog">
+  <div class="section">
+    <div class="rule"><span>✦</span></div>
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:0.5rem;" class="reveal">
+      <div>
+        <span class="section-label">Devlog & Updates</span>
+        <h2 class="section-title">From the <span class="accent">Field</span></h2>
+      </div>
+      <a href="https://www.youtube.com/@raaavula04" target="_blank" style="font-size:0.78rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--rust); text-decoration:none; font-weight:500; padding-bottom:2px; border-bottom:1px solid var(--rust); white-space:nowrap; transition:color 0.2s;" onmouseover="this.style.color='var(--sand)'; this.style.borderColor='var(--sand)';" onmouseout="this.style.color='var(--rust)'; this.style.borderColor='var(--rust)';">All Videos ↗</a>
+    </div>
+
+    <div class="devlog-grid">
+      <!-- Placeholder cards — replace with real content when devlog launches -->
+      <div class="devlog-empty reveal">
+        <p>"The devlogs are coming. The cat is getting dressed."</p>
+        <a href="https://www.youtube.com/playlist?list=PLYEHzYOTaTVWmWscc-l7IG1NOIOmsOk2E" target="_blank" class="btn-secondary" style="display:inline-block; font-size:0.85rem; padding:10px 28px;">Follow on YouTube ↗</a>
+      </div>
+    </div>
+
+    <!-- Uncomment and populate when you have devlog entries: -->
+    <div class="devlog-grid">
+      <a href="https://www.youtube.com/watch?v=ofQrBk89JW4&t=1s" class="devlog-card reveal reveal-delay-1">
+        <div class="devlog-meta">
+          <span class="devlog-type vid">Video</span>
+          <span class="devlog-date">Jun 2025</span>
+        </div>
+        <h3 class="devlog-title">I’m Building My Own Indie Game Studio at 18 | Devlog 0</h3>
+        <p class="devlog-excerpt">This is the beginning of Studio Raaav.
+
+I’m 18, and instead of starting another half-finished project, I’m committing to building and releasing a complete indie game under my own studio.
+
+This is Devlog #0 — the start of the journey.
+</p>
+        <span class="devlog-arrow">Watch →</span>
+      </a>
+    </div>
+   
+  </div>
+</section>
+
+<!-- ═══ CONTACT ════════════════════════════════════════ -->
+<section id="contact">
+  <div class="section">
+    <div class="rule"><span>✦</span></div>
+    <div class="contact-inner reveal">
+      <span class="contact-cat">🐱</span>
+      <span class="section-label">Get In Touch</span>
+      <h2 class="section-title">Stay on the <span class="accent">Trail</span></h2>
+      <p>Follow the development, wishlist the game, or reach out directly. The sheriff appreciates every deputy.</p>
+
+      <div class="contact-links">
+        <div class="contact-row">
+          <span class="contact-row-label">Studio</span>
+          <span class="contact-row-val">Studio Raaav</span>
+          <span class="contact-row-icon">—</span>
+        </div>
+        <a href="mailto:hello@studioraaav.in" class="contact-row">
+          <span class="contact-row-label">Email</span>
+          <span class="contact-row-val">hello@studioraaav.in</span>
+          <span class="contact-row-icon">↗</span>
+        </a>
+        <a href="https://studioraaav.in" target="_blank" class="contact-row">
+          <span class="contact-row-label">Website</span>
+          <span class="contact-row-val">studioraaav.in</span>
+          <span class="contact-row-icon">↗</span>
+        </a>
+        <a href="https://youtube.com/@raaavula04" target="_blank" class="contact-row">
+          <span class="contact-row-label">YouTube</span>
+          <span class="contact-row-val">Devlogs & Updates</span>
+          <span class="contact-row-icon">↗</span>
+        </a>
+        <a href="#" class="contact-row" style="background:rgba(212,164,74,0.06); border-color:rgba(212,164,74,0.25);">
+          <span class="contact-row-label">Steam</span>
+          <span class="contact-row-val" style="color:var(--sand);">Wishlist Paw & Order ↗</span>
+          <span class="contact-row-icon" style="color:var(--sand);">★</span>
+        </a>
+      </div>
+      <p class="wishlist-note">Adding to your wishlist on Steam helps the game reach more players. Every single click counts.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ══════════════════════════════════════════ -->
+<footer>
+  <a class="footer-brand" href="#">Paw & Order</a>
+  <p class="footer-copy">© 2026 Studio Raaav · All Rights Reserved</p>
+  <ul class="footer-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#devlog">Devlog</a></li>
+    <li><a href="mailto:hello@studioraaav.in">Contact</a></li>
+  </ul>
+</footer>
+
+<!-- ═══ JS ══════════════════════════════════════════════ -->
+<script>
+  // Nav scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Mobile burger
+  const burger = document.getElementById('burger');
+  const navLinks = document.getElementById('nav-links');
+  burger.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
